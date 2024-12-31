@@ -129,6 +129,9 @@ echo "HISTSIZE=999999999" >>~/.zshrc
 echo "SAVEHIST=999999999" >>~/.zshrc
 echo "HISTFILE=~/.zsh_history" >>~/.zshrc
 
+# add fpath for zsh completions
+echo "fpath+=$HOMEBREW_PREFIX/share/zsh/site-functions" >>~/.zshrc
+
 # set zsh autosuggest strategy
 echo "ZSH_AUTOSUGGEST_STRATEGY=(history completion)" >>~/.zshrc
 
