@@ -29,27 +29,27 @@ install_homebrew() {
 
 install_homebrew_packages() {
     list_str=$1
-    list=$(echo $list_str | tr "," "\n")
-    for package in $list; do
+    list=("${(@s/,/)list_str}")
+    for package in "${list[@]}"; do
+        package=$(echo "$package" | sed 's/^ *//')
         brew install $package
     done
 }
 
 install_homebrew_casks() {
     list_str=$1
-    list=$(echo $list_str | tr "," "\n")
-    for cask in $list; do
+    list=("${(@s/,/)list_str}")
+    for cask in "${list[@]}"; do
+        cask=$(echo "$cask" | sed 's/^ *//')
         brew install --cask $cask
     done
 }
 
 add_homebrew_taps() {
     taps_str=$1
-    echo "Adding Homebrew taps: $taps_str"
     taps=("${(@s/,/)taps_str}")
     for tap in "${taps[@]}"; do
         tap=$(echo "$tap" | sed 's/^ *//')
-        echo "Adding tap $tap"
         brew tap $tap
     done
 }
@@ -63,7 +63,7 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     exit 1
 fi
 add_homebrew_taps "common-fate/granted, hashicorp/tap"
-common_packages="zsh, git, gh, python, terraform, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta"
+common_packages="zsh, git, gh, python, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta, bat"
 common_casks="font-monaspace, 1password-cli, 1password, ghostty, antidote, slack"
 
 if [ "$type" = "work" ]; then
@@ -194,7 +194,6 @@ git config --global init.defaultBranch main
 git config --global rerere.enabled true
 git config --global core.pager delta
 git config --global diff.algorithm histogram
-git config --global core.excludeFiles = ~/.gitignore
 git config --global branch.sort -committerdate
 git config --global log.date iso
 git config --global interactive.diffFilter "delta --color-only"
