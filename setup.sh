@@ -53,7 +53,15 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     exit 1
 fi
 
-echo "Setting up $type environment"
+if [ "$type" = "work" ]; then
+    echo "Setting up work environment"
+    homebrew_packages="gh, awscli, terraform, python, uv, ruff, git, fzf, jq, kubectl, helm, curl, grep, openssh, eza"
+    homebrew_casks="ghostty, antidote, docker, font-monaspace, 1password-cli, 1password"
+elif [ "$type" = "personal" ]; then
+    echo "Setting up personal environment"
+    homebrew_packages="gh, awscli, terraform, python, uv, ruff, git, fzf, jq, kubectl, helm, curl, grep, openssh, eza"
+    homebrew_casks="ghostty, antidote, docker, font-monaspace, 1password-cli, 1password"
+fi
 
 vault_name=$(echo "$2" | xargs)
 if [ -z "$vault_name" ]; then
@@ -79,9 +87,9 @@ if [ "$skip_install" = false ]; then
     echo "Installing Homebrew"
     install_homebrew
     echo "Installing Homebrew packages"
-    install_homebrew_packages gh, awscli, terraform, python, uv, ruff, git, fzf, jq, kubectl, helm, curl, grep, openssh, eza
+    install_homebrew_packages $homebrew_packages
     echo "Installing Homebrew casks"
-    install_homebrew_casks ghostty, antidote, docker, font-monaspace
+    install_homebrew_casks $homebrew_casks
 fi
 
 # alias eza as ls
