@@ -43,6 +43,14 @@ install_homebrew_casks() {
     done
 }
 
+add_homebrew_taps() {
+    taps_str=$1
+    taps=$(echo $taps_str | tr "," "\n")
+    for tap in $taps; do
+        brew tap $tap
+    done
+}
+
 # Parameters
 
 # $1: type of setup - personal or work
@@ -52,15 +60,18 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     echo "Invalid setup type. Please provide either 'personal' or 'work' as the first argument"
     exit 1
 fi
+add_homebrew_taps "common-fate/granted"
+common_packages="zsh, git, gh, python, terraform, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq"
+common_casks="font-monaspace, 1password-cli, 1password, ghostty, antidote, slack"
 
 if [ "$type" = "work" ]; then
     echo "Setting up work environment"
-    homebrew_packages="gh, awscli, terraform, python, uv, ruff, git, fzf, jq, kubectl, helm, curl, grep, openssh, eza"
-    homebrew_casks="ghostty, antidote, docker, font-monaspace, 1password-cli, 1password"
+    homebrew_packages="${common_packages}, granted"
+    homebrew_casks="${common_casks}, google-chrome"
 elif [ "$type" = "personal" ]; then
     echo "Setting up personal environment"
-    homebrew_packages="gh, awscli, terraform, python, uv, ruff, git, fzf, jq, kubectl, helm, curl, grep, openssh, eza"
-    homebrew_casks="ghostty, antidote, docker, font-monaspace, 1password-cli, 1password"
+    homebrew_packages="${common_packages}"
+    homebrew_casks="${common_casks}, spotify, yaak, finicky"
 fi
 
 vault_name=$(echo "$2" | xargs)
