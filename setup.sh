@@ -63,7 +63,7 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     exit 1
 fi
 add_homebrew_taps "common-fate/granted, hashicorp/tap"
-common_packages="zsh, git, gh, python, terraform, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform"
+common_packages="zsh, git, gh, python, terraform, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta"
 common_casks="font-monaspace, 1password-cli, 1password, ghostty, antidote, slack"
 
 if [ "$type" = "work" ]; then
@@ -110,7 +110,7 @@ echo "Cleaning up Homebrew"
 brew cleanup
 
 # Configure zsh plugins
-cp .zsh/zsh_plugins.txt ~/.zsh_plugins.txt
+cp .zsh/.zsh_plugins.txt ~/.zsh_plugins.txt
 echo "reload zsh to apply changes"
 echo "run: exec zsh"
 
@@ -174,3 +174,29 @@ echo "### END Custom configurations ###" >>~/.zshrc
 # cp .gitconfig ~/.gitconfig
 cp .gitignore ~/.gitignore
 cp ./ghostty/config ~/.config/ghostty/config
+
+# check if git user.name and email are both set
+if [ -z "$(git config --global user.name)" ] || [ -z "$(git config --global user.email)" ]; then
+    # input prompt for git user name and email
+    echo "Please enter your git user name"
+    read -p "Enter your git user name: " git_user_name
+    echo "Please enter your git email"
+    read -p "Enter your git email: " git_email
+    git config --global user.name "$git_user_name"
+    git config --global user.email "$git_email"
+    echo "Git user name and email set"
+fi
+
+# configure git
+git config --global merge.conflictstyle zdiff3
+git config --global rebase.autosquash true
+git config --global init.defaultBranch main
+git config --global rerere.enabled true
+git config --global core.pager delta
+git config --global diff.algorithm histogram
+git config --global core.excludeFiles = ~/.gitignore
+git config --global branch.sort -committerdate
+git config --global log.date iso
+git config --global interactive.diffFilter "delta --color-only"
+git config --global delta.line-numbers true
+git config --global delta.decorations true

@@ -1,3 +1,4 @@
 font-family = Monaspace Neon
 window-colorspace = "display-p3"
 theme = duckbones
+window-padding-balance = true
