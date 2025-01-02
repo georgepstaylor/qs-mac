@@ -110,7 +110,7 @@ echo "Cleaning up Homebrew"
 brew cleanup
 
 # Configure zsh plugins
-cp .zsh/.zsh_plugins.txt ~/.zsh_plugins.txt
+cp zsh/.zsh_plugins.txt ~/.zsh_plugins.txt
 echo "reload zsh to apply changes"
 echo "run: exec zsh"
 
