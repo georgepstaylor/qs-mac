@@ -173,6 +173,9 @@ echo "### END Custom configurations ###" >>~/.zshrc
 # cp other dotfiles/configs
 # cp .gitconfig ~/.gitconfig
 cp .gitignore ~/.gitignore
+
+rm -f ~/Library/Application\ Support/com.mitchellh.ghostty/config
+mkdir -p ~/.config/ghostty
 cp ./ghostty/config ~/.config/ghostty/config
 
 # check if git user.name and email are both set
