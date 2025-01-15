@@ -156,8 +156,8 @@ echo "HIST_STAMPS='dd/mm/yyyy'" >>~/.zshrc
 # Setup 1password ssh agent
 echo "export SSH_AUTH_SOCK=~/.1password/agent.sock" >>~/.zshrc
 mkdir -p ~/.config/1Password/ssh
-touch ~/.config/1Password/ssh/config
-cat >~/.config/1Password/ssh/config <<EOF
+touch ~/.config/1Password/ssh/agent.toml
+cat >~/.config/1Password/ssh/agent.toml <<EOF
 [[ssh-keys]]
 vault = "$vault_name"
 EOF
