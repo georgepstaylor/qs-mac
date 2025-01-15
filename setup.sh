@@ -63,8 +63,8 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     exit 1
 fi
 add_homebrew_taps "common-fate/granted, hashicorp/tap"
-common_packages="zsh, git, gh, python, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta, bat"
-common_casks="font-monaspace, 1password-cli, 1password, ghostty, antidote, slack"
+common_packages="zsh, git, gh, python, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta, bat, antidote"
+common_casks="font-monaspace, 1password-cli, 1password, ghostty, slack"
 
 if [ "$type" = "work" ]; then
     echo "Setting up work environment"
