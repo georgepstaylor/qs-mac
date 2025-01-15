@@ -178,6 +178,10 @@ rm -f ~/Library/Application\ Support/com.mitchellh.ghostty/config
 mkdir -p ~/.config/ghostty
 cp ./ghostty/config ~/.config/ghostty/config
 
+# configure zed
+
+cp zed/settings.json ~/.config/zed/settings.json
+
 # check if git user.name and email are both set
 if [ -z "$(git config --global user.name)" ] || [ -z "$(git config --global user.email)" ]; then
     # input prompt for git user name and email
