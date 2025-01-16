@@ -32,7 +32,7 @@ install_homebrew_packages() {
     list=("${(@s/,/)list_str}")
     for package in "${list[@]}"; do
         package=$(echo "$package" | sed 's/^ *//')
-        brew install $package
+        brew install $package --force
     done
 }
 
@@ -41,7 +41,7 @@ install_homebrew_casks() {
     list=("${(@s/,/)list_str}")
     for cask in "${list[@]}"; do
         cask=$(echo "$cask" | sed 's/^ *//')
-        brew install --cask $cask
+        brew install --cask $cask --force
     done
 }
 
@@ -63,8 +63,8 @@ if [ "$type" != "personal" ] && [ "$type" != "work" ]; then
     exit 1
 fi
 add_homebrew_taps "common-fate/granted, hashicorp/tap"
-common_packages="zsh, git, gh, python, awscli, docker, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta, bat, antidote"
-common_casks="font-monaspace, 1password-cli, 1password, ghostty, slack"
+common_packages="zsh, git, gh, python, awscli, kubectl, helm, curl, grep, openssh, eza, uv, ruff, fzf, jq, hashicorp/tap/terraform, git-delta, bat, antidote"
+common_casks="font-monaspace, 1password-cli, 1password, ghostty, slack, docker"
 
 if [ "$type" = "work" ]; then
     echo "Setting up work environment"
@@ -154,7 +154,7 @@ echo "ZSH_AUTOSUGGEST_STRATEGY=(history completion)" >>~/.zshrc
 echo "HIST_STAMPS='dd/mm/yyyy'" >>~/.zshrc
 
 # Setup 1password ssh agent
-echo "export SSH_AUTH_SOCK=~/.1password/agent.sock" >>~/.zshrc
+echo "export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock" >>~/.zshrc
 mkdir -p ~/.config/1Password/ssh
 touch ~/.config/1Password/ssh/agent.toml
 cat >~/.config/1Password/ssh/agent.toml <<EOF
