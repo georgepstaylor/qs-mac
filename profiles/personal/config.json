@@ -1,0 +1,127 @@
+{
+    "name": "Personal Development Setup",
+    "description": "Configuration for personal Mac development environment",
+    "homebrew": {
+        "taps": [
+            "common-fate/granted",
+            "hashicorp/tap"
+        ],
+        "packages": [
+            "zsh",
+            "git",
+            "gh",
+            "python",
+            "awscli",
+            "kubectl",
+            "helm",
+            "curl",
+            "grep",
+            "openssh",
+            "eza",
+            "uv",
+            "ruff",
+            "fzf",
+            "jq",
+            "hashicorp/tap/terraform",
+            "git-delta",
+            "bat",
+            "antidote",
+            "starship"
+        ],
+        "casks": [
+            "font-monaspace",
+            "1password-cli",
+            "1password",
+            "ghostty",
+            "slack",
+            "docker",
+            "spotify",
+            "yaak",
+            "finicky"
+        ]
+    },
+    "zsh": {
+        "plugins": [
+            "git",
+            "aws",
+            "docker",
+            "brew",
+            "emoji",
+            "gh",
+            "python",
+            "terraform",
+            "common-aliases"
+        ],
+        "antidote_plugins": [
+            "zsh-users/zsh-autosuggestions",
+            "zsh-users/zsh-syntax-highlighting",
+            "marlonrichert/zsh-autocomplete",
+            "mattmc3/zfunctions",
+            "zdharma-continuum/fast-syntax-highlighting kind:defer",
+            "zsh-users/zsh-history-substring-search",
+            "sindresorhus/pure kind:fpath"
+        ],
+        "config": {
+            "HISTSIZE": "999999999",
+            "SAVEHIST": "999999999",
+            "HISTFILE": "~/.zsh_history",
+            "HIST_STAMPS": "dd/mm/yyyy",
+            "ZSH_AUTOSUGGEST_STRATEGY": "(history completion)"
+        },
+        "aliases": {
+            "ls": "eza --all --long --group --group-directories-first --icons --header --time-style long-iso"
+        },
+        "exports": {},
+        "init_commands": [
+            "source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh",
+            "antidote load ${ZDOTDIR:-$HOME}/.zsh_plugins.txt",
+            "autoload -U compinit && compinit",
+            "autoload -U +X bashcompinit && bashcompinit",
+            "complete -o nospace -C $HOMEBREW_PREFIX/bin/terraform terraform",
+            "eval \"$(fzf --zsh)\"",
+            "fpath+=$HOMEBREW_PREFIX/share/zsh/site-functions",
+            "eval \"$(starship init zsh)\""
+        ],
+        "oh_my_zsh_settings": {
+            "zstyle ':omz:update' check": "1",
+            "zstyle ':omz:update' mode": "auto"
+        }
+    },
+    "git": {
+        "config": {
+            "merge.conflictstyle": "zdiff3",
+            "rebase.autosquash": "true",
+            "init.defaultBranch": "main",
+            "rerere.enabled": "true",
+            "core.pager": "delta",
+            "diff.algorithm": "histogram",
+            "branch.sort": "-committerdate",
+            "log.date": "iso",
+            "interactive.diffFilter": "delta --color-only",
+            "delta.line-numbers": "true",
+            "delta.decorations": "true"
+        }
+    },
+    "editor": {
+        "default": "code-insiders -w"
+    },
+    "onepassword": {
+        "vault_name": "Personal"
+    },
+    "starship": {
+        "modules": {
+            "character": {
+                "success_symbol": "[➜](bold green)",
+                "error_symbol": "[➜](bold red)"
+            },
+            "directory": {
+                "truncate_to_repo": true
+            }
+        }
+    },
+    "files": {
+        "dotfiles/.gitignore": "~/.gitignore",
+        "ghostty/config": "~/.config/ghostty/config",
+        "zed/settings.json": "~/.config/zed/settings.json"
+    }
+}

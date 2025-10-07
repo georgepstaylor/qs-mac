@@ -1,0 +1,191 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Mac Setup Profile",
+    "description": "Configuration profile for Mac development environment setup",
+    "type": "object",
+    "required": [
+        "name",
+        "description",
+        "homebrew",
+        "zsh",
+        "git",
+        "editor"
+    ],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Human-readable name for this profile"
+        },
+        "description": {
+            "type": "string",
+            "description": "Detailed description of this profile's purpose"
+        },
+        "homebrew": {
+            "type": "object",
+            "required": [
+                "taps",
+                "packages",
+                "casks"
+            ],
+            "properties": {
+                "taps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Homebrew taps to add"
+                },
+                "packages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Homebrew packages to install"
+                },
+                "casks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Homebrew casks (applications) to install"
+                }
+            }
+        },
+        "zsh": {
+            "type": "object",
+            "required": [
+                "plugins",
+                "antidote_plugins"
+            ],
+            "properties": {
+                "plugins": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Oh My Zsh plugins to enable"
+                },
+                "antidote_plugins": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Antidote plugins to install (format: owner/repo)"
+                },
+                "config": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^[A-Z_][A-Z0-9_]*$": {
+                            "type": "string"
+                        }
+                    },
+                    "description": "Zsh configuration variables (e.g., HISTSIZE, SAVEHIST)"
+                },
+                "aliases": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^[a-zA-Z_][a-zA-Z0-9_-]*$": {
+                            "type": "string"
+                        }
+                    },
+                    "description": "Shell aliases to define"
+                },
+                "exports": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^[A-Z_][A-Z0-9_]*$": {
+                            "type": "string"
+                        }
+                    },
+                    "description": "Environment variables to export"
+                },
+                "init_commands": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Commands to run during zsh initialization"
+                },
+                "oh_my_zsh_settings": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^zstyle.*$": {
+                            "type": "string"
+                        }
+                    },
+                    "description": "Oh My Zsh zstyle settings"
+                }
+            }
+        },
+        "git": {
+            "type": "object",
+            "required": [
+                "config"
+            ],
+            "properties": {
+                "config": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^[a-zA-Z][a-zA-Z0-9._-]*$": {
+                            "type": "string"
+                        }
+                    },
+                    "description": "Git global configuration key-value pairs"
+                }
+            }
+        },
+        "editor": {
+            "type": "object",
+            "required": [
+                "default"
+            ],
+            "properties": {
+                "default": {
+                    "type": "string",
+                    "description": "Default editor command (sets EDITOR environment variable)"
+                }
+            }
+        },
+        "onepassword": {
+            "type": "object",
+            "properties": {
+                "vault_name": {
+                    "type": "string",
+                    "description": "Name of the 1Password vault to use for SSH keys"
+                }
+            }
+        },
+        "starship": {
+            "type": "object",
+            "properties": {
+                "format": {
+                    "type": "string",
+                    "description": "The format string for the prompt"
+                },
+                "add_newline": {
+                    "type": "boolean",
+                    "description": "Whether to add a newline before the prompt"
+                },
+                "modules": {
+                    "type": "object",
+                    "patternProperties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    },
+                    "description": "Starship module configurations"
+                }
+            },
+            "description": "Starship prompt configuration"
+        },
+        "files": {
+            "type": "object",
+            "patternProperties": {
+                ".*": {
+                    "type": "string"
+                }
+            },
+            "description": "Mapping of source files (relative to profile directory) to destination paths"
+        }
+    }
+}
