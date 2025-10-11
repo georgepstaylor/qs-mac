@@ -109,10 +109,6 @@
     },
     "starship": {
         "modules": {
-            "character": {
-                "success_symbol": "[➜](bold green)",
-                "error_symbol": "[➜](bold red)"
-            },
             "directory": {
                 "truncate_to_repo": true
             },
