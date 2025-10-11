@@ -58,8 +58,7 @@
             "marlonrichert/zsh-autocomplete",
             "mattmc3/zfunctions",
             "zdharma-continuum/fast-syntax-highlighting kind:defer",
-            "zsh-users/zsh-history-substring-search",
-            "sindresorhus/pure kind:fpath"
+            "zsh-users/zsh-history-substring-search"
         ],
         "config": {
             "HISTSIZE": "999999999",
@@ -116,6 +115,9 @@
             },
             "directory": {
                 "truncate_to_repo": true
+            },
+            "gcloud": {
+                "disabled": true
             }
         }
     },
