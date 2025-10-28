@@ -155,6 +155,16 @@
                 }
             }
         },
+        "bitwarden": {
+            "type": "object",
+            "properties": {
+                "signing_key": {
+                    "type": "string",
+                    "description": "Public SSH key to use for Git commit signing (optional, enables Git SSH signing)"
+                }
+            },
+            "description": "Bitwarden SSH agent configuration. All SSH keys in Bitwarden are automatically available to the agent."
+        },
         "starship": {
             "type": "object",
             "properties": {

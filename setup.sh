@@ -248,11 +248,15 @@ fi
 ensure_jq
 load_profile "$profile_path"
 
-# Get vault name from profile only
+# Get vault name from profile only if using 1Password
 vault_name=$(jq -r '.onepassword.vault_name // empty' "$profile_path")
 
-if [ -z "$vault_name" ]; then
-    log_error "No vault name found in profile. Please specify 'vault_name' in the onepassword section."
+# Check if either 1Password or Bitwarden is configured
+has_onepassword=$(jq -e '.onepassword' "$profile_path" >/dev/null 2>&1 && echo "true" || echo "false")
+has_bitwarden=$(jq -e '.bitwarden' "$profile_path" >/dev/null 2>&1 && echo "true" || echo "false")
+
+if [ "$has_onepassword" = "true" ] && [ -z "$vault_name" ]; then
+    log_error "1Password is configured but no vault name found. Please specify 'vault_name' in the onepassword section."
     echo "Example profile structure:"
     echo '  "onepassword": {'
     echo '    "vault_name": "Personal"'
@@ -260,7 +264,13 @@ if [ -z "$vault_name" ]; then
     exit 1
 fi
 
-log_info "Using vault name from profile: $vault_name"
+if [ "$has_onepassword" = "true" ]; then
+    log_info "Using 1Password with vault: $vault_name"
+elif [ "$has_bitwarden" = "true" ]; then
+    log_info "Using Bitwarden SSH agent"
+else
+    log_warning "No SSH agent (1Password or Bitwarden) configured in profile"
+fi
 
 log_info "Setting up environment: $(jq -r '.description' "$profile_path")"
 
@@ -342,6 +352,13 @@ EOF
             exports="${exports}\nexport SSH_AUTH_SOCK=~/.1password/agent.sock"
         else
             exports="export SSH_AUTH_SOCK=~/.1password/agent.sock"
+        fi
+    # Add Bitwarden SSH agent configuration if present
+    elif jq -e '.bitwarden' "$profile_path" >/dev/null 2>&1; then
+        if [[ -n "$exports" ]]; then
+            exports="${exports}\nexport SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock"
+        else
+            exports="export SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock"
         fi
     fi
     
@@ -430,6 +447,37 @@ EOF
 
 configure_onepassword "$profile_path" "$vault_name"
 
+# Generate Bitwarden SSH agent configuration declaratively
+configure_bitwarden() {
+    local profile_path="$1"
+    
+    # Check if Bitwarden configuration exists in profile
+    if ! jq -e '.bitwarden' "$profile_path" >/dev/null 2>&1; then
+        log_warning "No Bitwarden configuration found in profile, skipping..."
+        return
+    fi
+    
+    log_info "Configuring Bitwarden SSH agent..."
+    
+    # Remove 1Password IdentityAgent configuration from ~/.ssh/config if it exists
+    if [ -f ~/.ssh/config ] && grep -q "IdentityAgent.*1password" ~/.ssh/config 2>/dev/null; then
+        log_info "Removing 1Password IdentityAgent configuration from ~/.ssh/config"
+        # Create a backup
+        cp ~/.ssh/config ~/.ssh/config.backup
+        # Remove the 1Password IdentityAgent lines
+        sed -i.tmp '/IdentityAgent.*1password/d' ~/.ssh/config
+        # Also remove "Host *" lines that are immediately followed by the removed IdentityAgent
+        # This is a simplified approach - might need manual cleanup if config is complex
+        rm -f ~/.ssh/config.tmp
+        log_success "Removed 1Password configuration from ~/.ssh/config (backup saved to ~/.ssh/config.backup)"
+    fi
+    
+    log_success "Bitwarden SSH agent configured"
+    log_info "Make sure to enable SSH agent in Bitwarden settings and restart the application"
+}
+
+configure_bitwarden "$profile_path"
+
 # Copy files dynamically based on profile configuration
 copy_profile_files() {
     local profile_path="$1"
@@ -500,6 +548,20 @@ configure_git() {
                 log_info "Set git config: $key = $value"
             fi
         done <<< "$git_configs"
+    fi
+    
+    # Configure Git SSH signing if using Bitwarden
+    if jq -e '.bitwarden.signing_key' "$profile_path" >/dev/null 2>&1; then
+        local signing_key=$(jq -r '.bitwarden.signing_key' "$profile_path")
+        log_info "Configuring Git for SSH signing with Bitwarden..."
+        
+        # Remove any existing 1Password SSH signing program configuration
+        git config --global --unset gpg.ssh.program 2>/dev/null || true
+        
+        git config --global gpg.format ssh
+        git config --global user.signingkey "$signing_key"
+        git config --global commit.gpgsign true
+        log_success "Git SSH signing configured with Bitwarden"
     fi
 }
 

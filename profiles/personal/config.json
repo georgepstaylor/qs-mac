@@ -50,7 +50,8 @@
             "gh",
             "python",
             "terraform",
-            "common-aliases"
+            "common-aliases",
+            "kubectl"
         ],
         "antidote_plugins": [
             "zsh-users/zsh-autosuggestions",
@@ -104,8 +105,8 @@
     "editor": {
         "default": "code-insiders -w"
     },
-    "onepassword": {
-        "vault_name": "Personal"
+    "bitwarden": {
+        "signing_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/F/gRDkFojbcJ72JdV6pc2ZqB4mvIVaMSKHF4ZD3Sj"
     },
     "starship": {
         "modules": {
