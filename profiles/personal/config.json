@@ -13,6 +13,7 @@
             "python",
             "awscli",
             "kubectl",
+            "kubelogin",
             "helm",
             "curl",
             "grep",
