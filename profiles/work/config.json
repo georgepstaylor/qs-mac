@@ -98,7 +98,9 @@
             "log.date": "iso",
             "interactive.diffFilter": "delta --color-only",
             "delta.line-numbers": "true",
-            "delta.decorations": "true"
+            "delta.decorations": "true",
+            "user.name": "George Taylor",
+            "user.email": "3026030+georgepstaylor@users.noreply.github.com"
         }
     },
     "editor": {
